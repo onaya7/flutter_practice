@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_practice/page/home_page.dart';
+import 'package:flutter_practice/page/provider.dart';
+import 'package:provider/provider.dart';
 
-class AboutPage extends StatefulWidget {
+class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
-
-  @override
-  State<AboutPage> createState() => _AboutPageState();
-}
-
-class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
-    final ItemCounter data =
-        ModalRoute.of(context)!.settings.arguments as ItemCounter;
+    int itemCount = Provider.of<Manage>(context).counter;
     return Scaffold(
       appBar: AppBar(title: const Text('Second Screen')),
       body: Column(children: [
@@ -20,7 +14,7 @@ class _AboutPageState extends State<AboutPage> {
           alignment: Alignment.center,
           height: 300.0,
           child: Text(
-            '${data.count}',
+            '$itemCount',
             style: const TextStyle(fontSize: 30.0),
           ),
         ),
@@ -29,16 +23,12 @@ class _AboutPageState extends State<AboutPage> {
           children: [
             ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    data.count = (data.count ?? 0) + 1;
-                  });
+                 Provider.of<Manage>(context, listen: false).increaseCounter();
                 },
                 child: const Text('Add')),
             ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    data.count = (data.count ?? 0) -1;
-                  });
+               Provider.of<Manage>(context, listen: false).decreaseCounter();
                 },
                 child: const Text('Delete')),
           ],

@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_practice/page/provider.dart';
+import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class Homepage extends StatelessWidget {
+  const Homepage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int itemCount = 0;
   @override
   Widget build(BuildContext context) {
+    int itemCount = Provider.of<Manage>(context).counter;
     return Scaffold(
       appBar: AppBar(title: const Text('First Screen')),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/about',
-            arguments: ItemCounter(count: itemCount)),
+        onPressed: () => Navigator.pushNamed(
+          context,
+          '/about',
+        ),
         child: const Icon(Icons.forward),
       ),
       body: Column(children: [
@@ -32,16 +31,12 @@ class _HomePageState extends State<HomePage> {
           children: [
             ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    itemCount++;
-                  });
+                  Provider.of<Manage>(context, listen: false).increaseCounter();
                 },
                 child: const Text('Add')),
             ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    itemCount--;
-                  });
+                  Provider.of<Manage>(context, listen: false).decreaseCounter();
                 },
                 child: const Text('Delete')),
           ],
@@ -51,7 +46,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class ItemCounter {
-  int? count;
-  ItemCounter({this.count});
-}
+// class ItemCounter {
+//   int? count;
+//   ItemCounter({this.count});
+// }
