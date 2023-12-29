@@ -3,8 +3,13 @@ import 'package:flutter_practice/page/about_page.dart';
 import 'package:flutter_practice/page/home_page.dart';
 import 'package:flutter_practice/page/provider.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+);
   runApp(const MyApp());
 }
 

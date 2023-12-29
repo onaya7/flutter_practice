@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1008685749737",
+    "project_id": "flutterpractice-b48fc",
+    "storage_bucket": "flutterpractice-b48fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008685749737:android:725fa7dcb9bd24b545a778",
+        "android_client_info": {
+          "package_name": "com.devonaya.flutterPractice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4QJC0b2Y-o17DEmxhaMxfjj2mJgJR0do"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008685749737:android:1e01f260edbc704845a778",
+        "android_client_info": {
+          "package_name": "com.devonaya.flutter_practice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4QJC0b2Y-o17DEmxhaMxfjj2mJgJR0do"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
