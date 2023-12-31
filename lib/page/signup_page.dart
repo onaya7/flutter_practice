@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_practice/firebase_auth/firebase_auth.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -7,20 +9,32 @@ class SignUpPage extends StatefulWidget {
   State<SignUpPage> createState() => _SignUpPageState();
 }
 
-RegExp regex = RegExp(
-    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
-final _formKey = GlobalKey<FormState>();
-const Map<String, dynamic> _emailError = {
-  'EmptyEmail': '*Please enter your email',
-  'InvalidEmail': '*Please enter a valid email'
-};
-const Map<String, dynamic> _passwordError = {
-  'EmptyPassword': '*Please enter your password',
-  'InvalidPassword':
-      '*Please enter a valid password, \n*password must be at least 8 characters'
-};
-
 class _SignUpPageState extends State<SignUpPage> {
+  RegExp regex = RegExp(
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+  final _formKey = GlobalKey<FormState>();
+  final Map<String, dynamic> _emailError = {
+    'EmptyEmail': '*Please enter your email',
+    'InvalidEmail': '*Please enter a valid email'
+  };
+  final Map<String, dynamic> _passwordError = {
+    'EmptyPassword': '*Please enter your password',
+    'InvalidPassword':
+        '*Please enter a valid password, \n*password must be at least 8 characters'
+  };
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final Auth _auth = Auth();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +51,7 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Column(
             children: [
               TextFormField(
+                controller: _emailController,
                 decoration: const InputDecoration(
                   labelText: 'Email',
                 ),
@@ -54,6 +69,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 },
               ),
               TextFormField(
+                controller: _passwordController,
                 decoration: const InputDecoration(
                   labelText: 'Password',
                 ),
@@ -68,11 +84,20 @@ class _SignUpPageState extends State<SignUpPage> {
                 },
               ),
               ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      print('sign up successfull');
-                    }
-                  },
+                  onPressed:  () async {
+                  if (_formKey.currentState!.validate()) {
+                    try {
+                      await _auth.signUp(
+                          _emailController.text, _passwordController.text);
+                      if (!context.mounted) return;
+                      Navigator.pushNamed(context, '/');
+                    } on FirebaseAuthException catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(e.message!),
+                        ),
+                      );
+                    }}},
                   child: const Text('sign up'))
             ],
           ),

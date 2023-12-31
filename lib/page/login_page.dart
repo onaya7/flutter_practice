@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_practice/firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -7,11 +9,22 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-final _formKey = GlobalKey<FormState>();
-const String _emailError = 'Please enter a valid email';
-const String _passwordError = 'Please enter a valid password';
-
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  final String _emailError = 'Please enter a valid email';
+  final String _passwordError = 'Please enter a valid password';
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final Auth _auth = Auth();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: <Widget>[
               TextFormField(
+                controller: _emailController,
                 decoration: const InputDecoration(labelText: 'Email'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -40,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
               TextFormField(
+                controller: _passwordController,
                 decoration: const InputDecoration(labelText: 'Password'),
                 obscureText: true,
                 validator: (value) {
@@ -51,9 +66,21 @@ class _LoginPageState extends State<LoginPage> {
               ),
               ElevatedButton(
                 child: const Text('Login'),
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    print('processing data');
+                    try {
+                      await _auth.signIn(
+                          _emailController.text, _passwordController.text);
+                      if (!context.mounted) return;
+                      Navigator.pushNamed(context, '/');
+                    } on FirebaseAuthException catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(e.message!),
+                        ),
+                      );
+                    }
+                   
                   }
                 },
               ),
