@@ -84,20 +84,23 @@ class _SignUpPageState extends State<SignUpPage> {
                 },
               ),
               ElevatedButton(
-                  onPressed:  () async {
-                  if (_formKey.currentState!.validate()) {
-                    try {
-                      await _auth.signUp(
-                          _emailController.text, _passwordController.text);
-                      if (!context.mounted) return;
-                      Navigator.pushNamed(context, '/');
-                    } on FirebaseAuthException catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(e.message!),
-                        ),
-                      );
-                    }}},
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      try {
+                        await _auth.signUp(
+                            _emailController.text, _passwordController.text);
+                        if (!context.mounted) return;
+                        Navigator.pushNamed(context, '/login');
+                      } on FirebaseAuthException catch (e) {
+                        Navigator.pushNamed(context, '/Signup');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(e.message!),
+                          ),
+                        );
+                      }
+                    }
+                  },
                   child: const Text('sign up'))
             ],
           ),
